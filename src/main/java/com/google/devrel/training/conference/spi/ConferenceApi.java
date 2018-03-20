@@ -16,8 +16,14 @@ import com.google.api.server.spi.response.ConflictException;
 import com.google.api.server.spi.response.ForbiddenException;
 import com.google.api.server.spi.response.NotFoundException;
 import com.google.api.server.spi.response.UnauthorizedException;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.users.User;
 import com.google.devrel.training.conference.Constants;
+import com.google.devrel.training.conference.domain.Announcement;
 import com.google.devrel.training.conference.domain.Conference;
 import com.google.devrel.training.conference.domain.Profile;
 import com.google.devrel.training.conference.form.ConferenceForm;
@@ -179,7 +185,7 @@ public class ConferenceApi {
 
         // TODO (Lesson 4)
         // Get the userId of the logged in User
-        String userId = user.getUserId();
+       final String userId = user.getUserId();
 
         // TODO (Lesson 4)
         // Get the key for the User's Profile
@@ -193,23 +199,33 @@ public class ConferenceApi {
         // TODO (Lesson 4)
         // Get the Conference Id from the Key
         final long conferenceId = conferenceKey.getId();
+        final Queue queue = QueueFactory.getDefaultQueue();
 
         // TODO (Lesson 4)
         // Get the existing Profile entity for the current user if there is one
         // Otherwise create a new Profile entity with default values
-        Profile profile = getProfileFromUser(user);
+        
 
         // TODO (Lesson 4)
         // Create a new Conference Entity, specifying the user's Profile entity
         // as the parent of the conference
-        Conference conference = new Conference(conferenceId, userId, conferenceForm);
+        Conference conference = ofy().transact(new Work<Conference>() {
+        	@Override
+        	public Conference run() {
+        		Profile profile = getProfileFromUser(user);
+        		Conference conference = new Conference(conferenceId, userId, conferenceForm);
+        		ofy().save().entities(conference, profile).now();
+        		queue.add(ofy().getTransaction(), TaskOptions.Builder.withUrl("/tasks/send_confirmation_email")
+        				.param("email", profile.getMainEmail())
+        				.param("conferenceInfo", conference.toString()));
+        		 return conference;
+        	}
+        });
 
         // TODO (Lesson 4)
         // Save Conference and Profile Entities
-         ofy().save().entities(conference, profile).now();
-
-         return conference;
-         }
+        return conference;
+    }
 
     /** Code to add at the start of querying for conferences **/
 
@@ -544,6 +560,22 @@ public class ConferenceApi {
             keysToAttend.add(Key.<Conference>create(keyString));
         }
         return ofy().load().keys(keysToAttend).values();
+    }
+    
+    @ApiMethod(
+            name = "getAnnouncement",
+            path = "announcement",
+            httpMethod = HttpMethod.GET
+    )
+    
+    public Announcement getAnnouncement() {
+    	MemcacheService memcacheService = MemcacheServiceFactory.getMemcacheService();
+    	String announcementKey = Constants.MEMCACHE_ANNOUNCEMENTS_KEY;
+    	Object message = memcacheService.get(announcementKey);
+    	if(message!= null)
+    		return new Announcement(message.toString());
+    	return null;
+    
     }
 
 }
