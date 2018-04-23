@@ -1,17 +1,16 @@
-package com.google.devrel.training.conference.spi;
+package com.google.devrel.training.hobby.spi;
 
-import static com.google.devrel.training.conference.service.OfyService.ofy;
+import static com.google.devrel.training.hobby.service.OfyService.ofy;
 import static org.junit.Assert.*;
 
 import com.google.api.server.spi.response.UnauthorizedException;
 import com.google.appengine.api.users.User;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-// import com.google.devrel.training.conference.domain.Conference;
-import com.google.devrel.training.conference.domain.Profile;
-// import com.google.devrel.training.conference.form.ConferenceForm;
-import com.google.devrel.training.conference.form.ProfileForm;
-import com.google.devrel.training.conference.form.ProfileForm.TeeShirtSize;
+import com.google.devrel.training.hobby.domain.Profile;
+import com.google.devrel.training.hobby.form.ProfileForm;
+import com.google.devrel.training.hobby.form.ProfileForm.TeeShirtSize;
+import com.google.devrel.training.hobby.spi.HobbyApi;
 import com.googlecode.objectify.Key;
 
 import org.junit.After;
@@ -49,7 +48,7 @@ public class ConferenceApiTest {
 
     private User user;
 
-    private ConferenceApi conferenceApi;
+    private HobbyApi conferenceApi;
 
     private final LocalServiceTestHelper helper =
             new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig()
@@ -59,7 +58,7 @@ public class ConferenceApiTest {
     public void setUp() throws Exception {
         helper.setUp();
         user = new User(EMAIL, "gmail.com", USER_ID);
-        conferenceApi = new ConferenceApi();
+        conferenceApi = new HobbyApi();
     }
 
     @After

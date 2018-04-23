@@ -1,4 +1,4 @@
-package com.google.devrel.training.conference.form;
+package com.google.devrel.training.hobby.form;
 
 import com.google.common.collect.ImmutableList;
 
@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * A simple Java object (POJO) representing a Conference form sent from the client.
  */
-public class ConferenceForm {
+public class SectionForm {
     /**
      * The name of the conference.
      */
@@ -44,7 +44,7 @@ public class ConferenceForm {
      */
     private int maxAttendees;
 
-    private ConferenceForm() {}
+    private SectionForm() {}
 
     /**
      * Public constructor is solely for Unit Test.
@@ -56,7 +56,7 @@ public class ConferenceForm {
      * @param endDate
      * @param maxAttendees
      */
-    public ConferenceForm(String name, String description, List<String> topics, String city,
+    public SectionForm(String name, String description, List<String> topics, String city,
                           Date startDate, Date endDate, int maxAttendees) {
         this.name = name;
         this.description = description;

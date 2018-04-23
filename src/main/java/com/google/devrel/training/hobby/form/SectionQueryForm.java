@@ -1,13 +1,12 @@
-package com.google.devrel.training.conference.form;
-
-import static com.google.devrel.training.conference.service.OfyService.ofy;
+package com.google.devrel.training.hobby.form;
 
 import com.google.api.server.spi.config.AnnotationBoolean;
 import com.google.api.server.spi.config.ApiResourceProperty;
 import com.google.common.collect.ImmutableList;
-import com.google.devrel.training.conference.domain.Conference;
-
+import com.google.devrel.training.hobby.domain.Section;
 import com.googlecode.objectify.cmd.Query;
+
+import static com.google.devrel.training.hobby.service.OfyService.ofy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +15,9 @@ import java.util.logging.Logger;
 /**
  * A simple Java object (POJO) representing a query options for Conference.
  */
-public class ConferenceQueryForm {
+public class SectionQueryForm {
 
-    private static final Logger LOG = Logger.getLogger(ConferenceQueryForm.class.getName());
+    private static final Logger LOG = Logger.getLogger(SectionQueryForm.class.getName());
 
     /**
      * Enum representing a field type.
@@ -117,7 +116,7 @@ public class ConferenceQueryForm {
     @ApiResourceProperty(ignored = AnnotationBoolean.TRUE)
     private Filter inequalityFilter;
 
-    public ConferenceQueryForm() {}
+    public SectionQueryForm() {}
 
     /**
      * Checks the feasibility of the whole query.
@@ -150,7 +149,7 @@ public class ConferenceQueryForm {
      * @param filter A Filter object for the query.
      * @return this for method chaining.
      */
-    public ConferenceQueryForm filter(Filter filter) {
+    public SectionQueryForm filter(Filter filter) {
         if (filter.operator.isInequalityFilter()) {
             // Only allows inequality filters on a single field.
             if (inequalityFilter != null && !inequalityFilter.field.equals(filter.field)) {
@@ -169,10 +168,10 @@ public class ConferenceQueryForm {
      * @return an Objectify Query.
      */
     @ApiResourceProperty(ignored = AnnotationBoolean.TRUE)
-    public Query<Conference> getQuery() {
+    public Query<Section> getQuery() {
         // First check the feasibility of inequality filters.
         checkFilters();
-        Query<Conference> query = ofy().load().type(Conference.class);
+        Query<Section> query = ofy().load().type(Section.class);
         if (inequalityFilter == null) {
             // Order by name.
             query = query.order("name");

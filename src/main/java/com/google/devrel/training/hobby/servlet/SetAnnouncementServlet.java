@@ -1,12 +1,12 @@
-package com.google.devrel.training.conference.servlet;
-
-import static com.google.devrel.training.conference.service.OfyService.ofy;
+package com.google.devrel.training.hobby.servlet;
 
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.common.base.Joiner;
-import com.google.devrel.training.conference.Constants;
-import com.google.devrel.training.conference.domain.Conference;
+import com.google.devrel.training.hobby.Constants;
+import com.google.devrel.training.hobby.domain.Section;
+
+import static com.google.devrel.training.hobby.service.OfyService.ofy;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class SetAnnouncementServlet extends HttpServlet {
 
         // TODO
         // Query for conferences with less than 5 seats left
-        Iterable<Conference> iterable = ofy().load().type(Conference.class)
+        Iterable<Section> iterable = ofy().load().type(Section.class)
         		.filter("seatsAvailable < ", 5)
         		.filter("seatsAvailable > ", 0);
 
@@ -39,7 +39,7 @@ public class SetAnnouncementServlet extends HttpServlet {
         // Iterate over the conferences with less than 5 seats less
         // and get the name of each one
         List<String> conferenceNames = new ArrayList<>(0);
-        for (Conference conference : iterable) {
+        for (Section conference : iterable) {
             conferenceNames.add(conference.getName());
         }
         if (conferenceNames.size() > 0) {

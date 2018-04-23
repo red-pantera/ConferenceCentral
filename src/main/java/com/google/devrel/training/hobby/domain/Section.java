@@ -1,19 +1,20 @@
-package com.google.devrel.training.conference.domain;
+package com.google.devrel.training.hobby.domain;
 
-import static com.google.devrel.training.conference.service.OfyService.ofy;
 import com.googlecode.objectify.condition.IfNotDefault;
 
 import com.google.api.server.spi.config.AnnotationBoolean;
 import com.google.api.server.spi.config.ApiResourceProperty;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.google.devrel.training.conference.form.ConferenceForm;
+import com.google.devrel.training.hobby.form.SectionForm;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Parent;
+
+import static com.google.devrel.training.hobby.service.OfyService.ofy;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -24,7 +25,7 @@ import java.util.List;
  */
 @Entity
 @Cache
-public class Conference {
+public class Section {
 
     private static final String DEFAULT_CITY = "Default City";
 
@@ -33,13 +34,13 @@ public class Conference {
     /**
      * The id for the datastore key.
      *
-     * We use automatic id assignment for entities of Conference class.
+     * We use automatic id assignment for entities of Section class.
      */
     @Id
     private long id;
 
     /**
-     * The name of the conference.
+     * The name of the section.
      */
     @Index
     private String name;
@@ -101,15 +102,15 @@ public class Conference {
      * Number of seats currently available.
      */
     @Index
-    private int seatsAvailable;
+     private int seatsAvailable;
 
     /**
      * Just making the default constructor private.
      */
-    private Conference() {}
+    private Section() {}
 
-    public Conference(final long id, final String organizerUserId,
-                      final ConferenceForm conferenceForm) {
+    public Section(final long id, final String organizerUserId,
+                      final SectionForm conferenceForm) {
         Preconditions.checkNotNull(conferenceForm.getName(), "The name is required");
         this.id = id;
         this.profileKey = Key.create(Profile.class, organizerUserId);
@@ -136,7 +137,7 @@ public class Conference {
 
     // Get a String version of the key
     public String getWebsafeKey() {
-        return Key.create(profileKey, Conference.class, id).getString();
+        return Key.create(profileKey, Section.class, id).getString();
     }
 
     @ApiResourceProperty(ignored = AnnotationBoolean.TRUE)
@@ -205,7 +206,7 @@ public class Conference {
      *
      * @param conferenceForm contains form data sent from the client.
      */
-    public void updateWithConferenceForm(ConferenceForm conferenceForm) {
+    public void updateWithConferenceForm(SectionForm conferenceForm) {
         this.name = conferenceForm.getName();
         this.description = conferenceForm.getDescription();
         List<String> topics = conferenceForm.getTopics();

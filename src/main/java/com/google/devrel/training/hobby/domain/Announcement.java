@@ -1,4 +1,4 @@
-package com.google.devrel.training.conference.domain;
+package com.google.devrel.training.hobby.domain;
 
 public class Announcement {
    

@@ -1,10 +1,11 @@
-package com.google.devrel.training.conference.domain;
+package com.google.devrel.training.hobby.domain;
 
 import static org.junit.Assert.*;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.google.devrel.training.conference.form.ProfileForm.TeeShirtSize;
+import com.google.devrel.training.hobby.domain.Profile;
+import com.google.devrel.training.hobby.form.ProfileForm.TeeShirtSize;
 import com.googlecode.objectify.Key;
 
 import org.junit.After;

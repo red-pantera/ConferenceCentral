@@ -1,4 +1,4 @@
-package com.google.devrel.training.conference.form;
+package com.google.devrel.training.hobby.form;
 
 /**
  * Pojo representing a profile form on the client side.

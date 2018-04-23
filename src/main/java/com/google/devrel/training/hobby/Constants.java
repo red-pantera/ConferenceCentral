@@ -1,4 +1,4 @@
-package com.google.devrel.training.conference;
+package com.google.devrel.training.hobby;
 
 import com.google.api.server.spi.Constant;
 

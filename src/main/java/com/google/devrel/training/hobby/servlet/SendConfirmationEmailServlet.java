@@ -1,4 +1,4 @@
-package com.google.devrel.training.conference.servlet;
+package com.google.devrel.training.hobby.servlet;
 
 import com.google.appengine.api.utils.SystemProperty;
 
